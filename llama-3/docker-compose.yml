@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  ollama-cpu:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 0
+
+  ollama-gpu:
+    image: ollama/ollama
+    container_name: ollama-gpu
+    ports:
+      - "11434:11434"
+    volumes:
+      - /home/ollama:/root/.ollama:z
+    deploy:
+     resources:
+       reservations:
+         devices:
+         - driver: nvidia
+           capabilities: [gpu]
+    runtime: nvidia
+
+volumes:
+  ollama:
